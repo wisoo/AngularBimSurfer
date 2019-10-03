@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { BimServerClient } from 'bimserverapi/bimserverclient';
-import { BimServerViewer } from '@micaw/bimsurfer3/viewer/bimserverviewer';
-import { Settings } from '@micaw/bimsurfer3/viewer/settings';
+import { BimServerViewer } from '@slivka/surfer/viewer/bimserverviewer';
+import { Settings } from '@slivka/surfer/viewer/settings';
 
 @Component({
   selector: 'app-root',
@@ -20,13 +20,13 @@ export class AppComponent implements OnInit {
     this.settings = JSON.parse(JSON.stringify(this.settingsView.settings));
     console.log(this.settings);
     this.settings.drawTileBorders = false;
-    let api = new BimServerClient('http://46.105.124.137:8080/bimserver');
+    const api = new BimServerClient('http://46.105.124.137:8080/bimserver');
     api.init(() => {
       console.log(api);
       api.login('wacim.yassine@syscobat.com', 'admin', () => {
         // So now authentication has succeeded, make sure that for a real implementation you also check for errors
         api.call('ServiceInterface', 'getProjectByPoid', {poid: '131073'}, (project) => {
-          let canvas = document.getElementById('glcanvas');
+          const canvas = document.getElementById('glcanvas');
           console.log(canvas);
           console.log(project);
           this.bimServerViewer = new BimServerViewer(this.settings, canvas, null, null, null);

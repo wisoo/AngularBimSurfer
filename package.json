@@ -22,7 +22,7 @@
     "rxjs": "~6.4.0",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1",
-    "@micaw/bimsurfer3": "0.254.0",
+    "@slivka/surfer": "^0.264.1",
     "bimserverapi": "0.0.167"
   },
   "devDependencies": {
