@@ -117,6 +117,8 @@ export class AppComponent implements AfterViewInit {
         if (this.bimServerViewer.settings.sectionPlaneDirection === 0) {
             this.bimServerViewer.viewer.removeSectionPlaneWidget();
             this.bimServerViewer.viewer.disableSectionPlane();
+        } else if (this.bimServerViewer.settings.sectionPlaneDirection === 1) {
+            this.bimServerViewer.viewer.removeSectionPlaneWidget();
         }
     }
 
@@ -144,7 +146,10 @@ export class AppComponent implements AfterViewInit {
         this.bimPropertyListService.clear();
 
         if (this.bimServerViewer) {
-            this.bimServerViewer.viewer.overlay.nodes[0].destroy();
+            const nodes = this.bimServerViewer.viewer.overlay.nodes;
+            for (let index = 0; index < nodes.length; index++) {
+                nodes[index].destroy();
+            }
             this.bimServerViewer.viewer.eventHandler.off('selection_state_changed', (elements: any, isSelected: boolean) => {
                 this.onSelectionChanged(elements, isSelected);
             });
