@@ -1,4 +1,4 @@
 export class ProjectInfo {
-  name: string;
-  poid: number;
+    name: string;
+    poid: number;
 }
