@@ -1,0 +1,16 @@
+<div class="container">
+
+  <div class="main-container">
+    <div class="project-container">
+      <p>Projects:</p>
+      <p class="project"
+         *ngFor="let info of projectsInfo"
+         (click)="navigateToProject(info)">{{info.poid}}; <b>{{info.name}}</b></p>
+    </div>
+  </div>
+
+  <div class="model-container">
+    <canvas class="model"
+            id="glcanvas"></canvas>
+  </div>
+</div>
