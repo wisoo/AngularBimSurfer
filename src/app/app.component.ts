@@ -80,17 +80,17 @@ export class AppComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.login();
-        this.translations['BOUNDING_BOX_SIZE_ALONG_X'] = 'Dĺžka (X)';
-        this.translations['BOUNDING_BOX_SIZE_ALONG_Y'] = 'Hrúbka (Y)';
-        this.translations['BOUNDING_BOX_SIZE_ALONG_Z'] = 'Výška (Z)';
+        this.translations['BOUNDING_BOX_SIZE_ALONG_X'] = 'BOUNDING_BOX_SIZE_ALONG_X';
+        this.translations['BOUNDING_BOX_SIZE_ALONG_Y'] = 'BOUNDING_BOX_SIZE_ALONG_Y';
+        this.translations['BOUNDING_BOX_SIZE_ALONG_Z'] = 'BOUNDING_BOX_SIZE_ALONG_Z';
 
-        this.translations['SURFACE_AREA_ALONG_X'] = 'Plocha podľa osi X';
-        this.translations['SURFACE_AREA_ALONG_Y'] = 'Plocha podľa osi Y';
-        this.translations['SURFACE_AREA_ALONG_Z'] = 'Plocha podľa osi Z';
-        this.translations['LARGEST_FACE_AREA'] = 'Najväčšia predná plocha';
-        this.translations['TOTAL_SURFACE_AREA'] = 'Celková plocha';
+        this.translations['SURFACE_AREA_ALONG_X'] = 'SURFACE_AREA_ALONG_X';
+        this.translations['SURFACE_AREA_ALONG_Y'] = 'SURFACE_AREA_ALONG_Y';
+        this.translations['SURFACE_AREA_ALONG_Z'] = 'SURFACE_AREA_ALONG_Z';
+        this.translations['LARGEST_FACE_AREA'] = 'LARGEST_FACE_AREA';
+        this.translations['TOTAL_SURFACE_AREA'] = 'TOTAL_SURFACE_AREA';
 
-        this.translations['TOTAL_SHAPE_VOLUME'] = 'Objem';
+        this.translations['TOTAL_SHAPE_VOLUME'] = 'TOTAL_SHAPE_VOLUME';
 
         this.bimPropertyListService.propertiesLoaded
             .pipe(takeUntil(this.unsubscribe))

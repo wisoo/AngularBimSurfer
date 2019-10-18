@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:8082',
-    login: 'slivka@kros.sk',
-    password: '21kros12',
+    apiUrl: 'http://46.105.124.137:8080/bimserver',
+    login: 'wacim.yassine@syscobat.com',
+    password: '',
 };
