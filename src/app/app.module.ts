@@ -11,6 +11,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { BimPropertyListService } from './bim-property-list.service';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import { BimPropertyListService } from './bim-property-list.service';
         MatTableModule,
         MatTreeModule,
         MatIconModule,
-        MatButtonModule
+        MatButtonModule,
+        HttpClientModule
     ],
     exports: [
         MatIconModule,

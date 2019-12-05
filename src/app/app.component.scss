@@ -79,8 +79,8 @@
 
       .sectionPlane {
         display: flex;
-        flex: 2;
         align-items: center;
+        padding-left: 15px;
       }
     }
 
@@ -142,12 +142,12 @@
             font-size: 12px;
 
             .cdk-column-name {
-              flex: 0 0 200px;
+              flex: 0 0 260px;
               padding-right: 5px;
             }
 
             .cdk-column-value {
-              flex: 0 0 60px;
+              flex: 0 0 80px;
               padding-right: 5px;
             }
 

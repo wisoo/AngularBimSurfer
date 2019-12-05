@@ -13,6 +13,10 @@ import { BimPropertyListService } from './bim-property-list.service';
 import { BimPropertyNodeModel, BimPropertyModel } from './bim-property.model';
 import { Subject, Observable, of as observableOf } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import 'reflect-metadata';
+import {createConnection} from 'typeorm';
+import { IFCObject } from './ifcobject';
 
 export interface Direction {
     value: string;
@@ -34,8 +38,9 @@ export class AppComponent implements AfterViewInit {
     bimServerViewer: BimServerViewer;
     camera: any;
     progress = 0;
-    isSectionDirection = true;
+    isSectionDirection: boolean;
     roid: number;
+    div: HTMLElement;
 
     dataSource: MatTableDataSource<BimMeasureRow>;
     displayedColumns: string[] = ['name', 'value', 'measureUnit'];
@@ -55,15 +60,19 @@ export class AppComponent implements AfterViewInit {
     ];
 
     translations = {};
+    private animationEnabled: boolean;
 
     constructor(
         private bimPropertyListService: BimPropertyListService,
-        private bimMeasureUnitHelper: BimMeasureUnitHelper) {
+        private bimMeasureUnitHelper: BimMeasureUnitHelper,
+        private http: HttpClient) {
 
         this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
             this.isExpandable, this.getChildren);
         this.treeControl = new FlatTreeControl<BimPropertyNodeModel>(this.getLevel, this.isExpandable);
         this.properties = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+        this.animationEnabled = true;
+        this.isSectionDirection = true;
     }
 
     transformer = (node: BimPropertyModel, level: number) => {
@@ -103,12 +112,27 @@ export class AppComponent implements AfterViewInit {
         this.login();
     }
 
+      keyPressListener(event) {
+      if (event.key === ' ') {
+        event.preventDefault();
+        console.log('ca doit tourner la');
+        this.animationEnabled = !(this.animationEnabled);
+        this.bimServerViewer.viewer.navigationActive = this.animationEnabled;
+      }
+    }
+
     onLoadDocument(event: any) {
         this.loadModel(this.documentId);
     }
 
     navigateToProject(info: ProjectInfo) {
         this.loadModel(info.name);
+    }
+
+    getObjectsStates(address, phase) {
+      const params = new HttpParams().set('Phase', phase);
+      console.log(this.http);
+      return( this.http.get(address + '?Phase=Demo', { responseType: 'text' }) );
     }
 
     onDirectionChange(event: any) {
@@ -132,7 +156,8 @@ export class AppComponent implements AfterViewInit {
     }
 
     private loadModel(documentName: string) {
-        this.clear();
+        this.dataSource = undefined;
+        this.bimPropertyListService.showElementProperties([]);
 
         this.getProjectByName(documentName, (project: any) => {
             this.getTotalPrimitives([project.roid]).then((totalPrimitives: number) => {
@@ -192,6 +217,7 @@ export class AppComponent implements AfterViewInit {
     }
 
     private getAllProjectsCallBack(projects: any) {
+      this.projectsInfo = [];
         projects.slice(0, 10).forEach((project: any) => this.getProjectInfo(project));
     }
 
@@ -230,11 +256,23 @@ export class AppComponent implements AfterViewInit {
                     canvas.clientWidth,
                     canvas.clientHeight,
                     null);
-
+                this.bimServerViewer.viewer.addAnimationListener((deltaTime) => {
+                  if (this.animationEnabled) {
+                    this.bimServerViewer.viewer.camera.orbitYaw(0.1);
+                  }
+                });
                 this.bimServerViewer.setProgressListener((percentage: number) => {
                     this.progress = Math.round(percentage);
+                  if (percentage === 100) {
+                    this.getObjectsStates('https://app.flashbim.com/JJPP.php', 'Demo').subscribe(data => {
+                      console.log(data);
+                      this.div = document.createElement('div', );
+                      this.div.innerHTML = data.trim();
+                      console.log(this.div);
+                      const ids = this.setColorsAccordingToDB();
+                    });
+                  }
                 });
-
                 this.bimServerViewer.loadModel(this.bimServerClient, project).then((data: any) => {
                     const bimSurfer = this.bimServerViewer.viewer;
 
@@ -245,11 +283,26 @@ export class AppComponent implements AfterViewInit {
             });
         });
     }
+    /*
 
+     */
     private onSelectionChanged(elements: number[], isSelected: boolean) {
         if (elements && elements.length > 0 && isSelected) {
             this.bimPropertyListService.showElementProperties(elements);
             this.getGeometryInfo(elements[0]);
+            createConnection({
+              type: 'sqlite',
+              database: '../assets/database.db',
+              entities: [
+                IFCObject
+              ],
+              synchronize: true,
+              logging: false
+            }).then(async connection => {
+              const ifcObjectRepository = connection.getRepository(IFCObject);
+              const ifcObject = await ifcObjectRepository.findOne({oid: elements[0]});
+              console.log(ifcObject);
+            }).catch(error => console.log(error));
         } else {
             this.dataSource = undefined;
             this.bimPropertyListService.showElementProperties([]);
@@ -258,9 +311,14 @@ export class AppComponent implements AfterViewInit {
 
     private getExludeTypes(schema: string): string[] {
         if (schema === 'ifc4') {
-            return ['IfcSpace', 'IfcOpeningElement', 'IfcAnnotation', 'IfcOpeningStandardCase'];
+          // return [];
+          // return ['IfcSpace', 'IfcOpeningElement', 'IfcOpeningStandardCase'];
+          return ['IfcSpace', 'IfcOpeningElement', 'IfcAnnotation', 'IfcOpeningStandardCase'];
+
         } else {
-            return ['IfcSpace', 'IfcOpeningElement', 'IfcAnnotation'];
+          // return [];
+          // return ['IfcSpace', 'IfcOpeningElement', 'IfcAnnotation'];
+          return ['IfcSpace', 'IfcOpeningElement'];
         }
     }
 
@@ -328,4 +386,63 @@ export class AppComponent implements AfterViewInit {
             ]
         };
     }
+    public setColorsAccordingToDB() {
+      this.bimServerViewer.viewer.setColor( ['660078855'] , [0, 100, 200, 100] );
+      this.bimServerViewer.viewer.setColor( ['659947783'] , [100, 200, 0, 100] );
+      this.bimServerViewer.viewer.setColor( ['660013319'] , [0, 200, 100, 100] );
+    }
+    /*public setColorsAccordingToDB() {
+      const oidToGuid = new Map();
+      const guidToOid = new Map();
+      const databaseIDsAndState = new Map();
+      const node = this.div;
+      console.log('node = ', node);
+      const fabrication = new Map();
+      const fabrique = new Map();
+      const palettise = new Map();
+      const livre = new Map();
+      const pose = new Map();
+      const feraille = new Map();
+      const coule = new Map();
+
+      const colors = {
+        Fabrication: [1, 0.85, 0, 100],
+        Fabriquer: [1, 1, 0, 100],
+        Palettiser: [0.68, 0.47, 0, 100],
+        Livrer: [0.53, 0, 0, 100],
+        Poser: [100, 200, 100, 100],
+        Ferrailler: [200, 100, 0, 100],
+        Couler: [0, 100, 200, 100]
+      };
+
+      this.bimServerClient.call('LowLevelInterface', 'getDataObjectsByType',
+        {roid: this.bimServerViewer.revisionId, packageName: 'ifc2x3tc1',
+          className: 'IfcBuildingElementProxy', flat: 'false'}, (res) => {
+          console.log('res = ', res);
+          for (const elem of res) {
+
+            guidToOid.set(elem.values[13].stringValue, elem.oid);
+            oidToGuid.set(elem.oid, elem.values[13].stringValue);
+          }
+
+          for (let i = 0; i < node.childNodes[0].childNodes.length; i++) {
+            const child = node.childNodes[0].childNodes[i];
+            console.log('child', child);
+            if (child['name'] !== '') {
+              databaseIDsAndState.set(child['name'], child['value']);
+            }
+          }
+          console.log('databaseIDsAndState = ', databaseIDsAndState);
+          for (const numero of databaseIDsAndState.keys()) {
+            const numArray = [numero];
+            console.log('setting color of numero, ', numero, colors[databaseIDsAndState.get(numero)]);
+            console.log('this.bimServerViewer.viewer.setColor(', numArray, ', ', colors[databaseIDsAndState.get(numero)], ');');
+            this.bimServerViewer.viewer.setColor(numArray, colors[databaseIDsAndState.get(numero)]);
+          }
+        },
+        function(res) {
+        });
+      console.log('result: ', [oidToGuid, guidToOid]);
+      return [oidToGuid, guidToOid];
+    }*/
 }

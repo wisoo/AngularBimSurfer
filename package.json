@@ -30,9 +30,14 @@
     "@slivka/surfer": "^0.264.3",
     "bimserverapi": "0.0.167",
     "core-js": "^2.5.4",
+    "ngx-deploy": "^1.0.3",
+    "reflect-metadata": "^0.1.13",
     "rxjs": "~6.5.2",
+    "sqlite3": "^4.1.0",
     "tslib": "^1.9.0",
-    "zone.js": "~0.9.1"
+    "typeorm": "^0.2.20",
+    "zone.js": "~0.9.1",
+    "@types/node": "^8.10.59"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.801.1",
@@ -41,7 +46,7 @@
     "@angular/language-service": "^8.1.1",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "~8.9.4",
+    "@types/node": "^8.10.59",
     "codelyzer": "^5.0.1",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
