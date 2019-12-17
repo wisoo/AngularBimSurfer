@@ -30,14 +30,14 @@
     "@slivka/surfer": "^0.264.3",
     "bimserverapi": "0.0.167",
     "core-js": "^2.5.4",
+    "mysql": "^2.17.1",
     "ngx-deploy": "^1.0.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.5.2",
-    "sqlite3": "^4.1.0",
+    "sqlite3": "^4.1.1",
     "tslib": "^1.9.0",
     "typeorm": "^0.2.20",
-    "zone.js": "~0.9.1",
-    "@types/node": "^8.10.59"
+    "zone.js": "~0.9.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.801.1",

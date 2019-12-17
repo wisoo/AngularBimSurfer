@@ -15,8 +15,8 @@ import { Subject, Observable, of as observableOf } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import 'reflect-metadata';
-import {createConnection} from 'typeorm';
-import { IFCObject } from './ifcobject';
+import { createConnection } from 'typeorm';
+import { IFCObject } from '../../sqlite-orm/src/ifcObject/ifcObjectEntity';
 
 export interface Direction {
     value: string;
@@ -66,7 +66,7 @@ export class AppComponent implements AfterViewInit {
         private bimPropertyListService: BimPropertyListService,
         private bimMeasureUnitHelper: BimMeasureUnitHelper,
         private http: HttpClient) {
-
+        console.log('this is the constructor console.log working');
         this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
             this.isExpandable, this.getChildren);
         this.treeControl = new FlatTreeControl<BimPropertyNodeModel>(this.getLevel, this.isExpandable);
@@ -112,7 +112,26 @@ export class AppComponent implements AfterViewInit {
         this.login();
     }
 
-      keyPressListener(event) {
+    inCanvasClick(event) {
+      if (this.bimServerViewer.viewer.selectedElements.size) {
+        console.log(this.bimServerViewer.viewer.selectedElements._set);
+        createConnection(/*{
+              type: 'sqlite',
+              database: '../assets/database.db',
+              entities: [
+                IFCObject
+              ],
+              synchronize: true,
+              logging: false
+            }*/).then(async connection => {
+          const ifcObjectRepository = connection.getRepository(IFCObject);
+          const ifcObject = await ifcObjectRepository.findOne({oid: this.bimServerViewer.viewer.selectedElements._set[0]});
+          console.log(ifcObject);
+        }).catch(error => console.log(error));
+      }
+    }
+
+    keyPressListener(event) {
       if (event.key === ' ') {
         event.preventDefault();
         console.log('ca doit tourner la');
@@ -258,7 +277,7 @@ export class AppComponent implements AfterViewInit {
                     null);
                 this.bimServerViewer.viewer.addAnimationListener((deltaTime) => {
                   if (this.animationEnabled) {
-                    this.bimServerViewer.viewer.camera.orbitYaw(0.1);
+                    this.bimServerViewer.viewer.camera.orbitYaw(0.05);
                   }
                 });
                 this.bimServerViewer.setProgressListener((percentage: number) => {
@@ -275,8 +294,8 @@ export class AppComponent implements AfterViewInit {
                 });
                 this.bimServerViewer.loadModel(this.bimServerClient, project).then((data: any) => {
                     const bimSurfer = this.bimServerViewer.viewer;
-
                     bimSurfer.eventHandler.on('selection_state_changed', (elements: any, isSelected: boolean) => {
+                        console.log('hi !');
                         this.onSelectionChanged(elements, isSelected);
                     });
                 });
@@ -290,19 +309,7 @@ export class AppComponent implements AfterViewInit {
         if (elements && elements.length > 0 && isSelected) {
             this.bimPropertyListService.showElementProperties(elements);
             this.getGeometryInfo(elements[0]);
-            createConnection({
-              type: 'sqlite',
-              database: '../assets/database.db',
-              entities: [
-                IFCObject
-              ],
-              synchronize: true,
-              logging: false
-            }).then(async connection => {
-              const ifcObjectRepository = connection.getRepository(IFCObject);
-              const ifcObject = await ifcObjectRepository.findOne({oid: elements[0]});
-              console.log(ifcObject);
-            }).catch(error => console.log(error));
+
         } else {
             this.dataSource = undefined;
             this.bimPropertyListService.showElementProperties([]);
