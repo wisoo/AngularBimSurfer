@@ -69,7 +69,10 @@
 
     <div class="model-container">
         <div class="left">
-            <div class="top">
+          <app-bim-property-list class="top">
+
+          </app-bim-property-list>
+            <!--<div class="top">
                 <div class="header">
                     <h4 class="mat-h4"></h4>
                 </div>
@@ -94,45 +97,45 @@
                         class="no-selection">
                     </mat-row>
                 </mat-table>
-            </div>
-            <div class="bottom">
-                <div class="header">
-                    <h4 class="mat-h4"></h4>
-                </div>
-                <div class="kros-property-list-container container">
-                    <mat-tree [dataSource]="properties"
-                        [treeControl]="treeControl"
-                        *ngIf="properties.data"
-                        class="content">
-                        <mat-tree-node *matTreeNodeDef="let node"
-                            class="node-children level-{{node.level}}">
-                            <div class="node-row">
-                                <div class="node-button"></div>
-                                <div class="node-name">{{node.name}}</div>
-                                <div class="node-value">{{node.value}}</div>
-                            </div>
-                        </mat-tree-node>
+            </div>-->
+          <!--<div class="bottom">
+              <div class="header">
+                  <h4 class="mat-h4"></h4>
+              </div>
+              <div class="kros-property-list-container container">
+                  <mat-tree [dataSource]="properties"
+                      [treeControl]="treeControl"
+                      *ngIf="properties.data"
+                      class="content">
+                      <mat-tree-node *matTreeNodeDef="let node"
+                          class="node-children level-{{node.level}}">
+                          <div class="node-row">
+                              <div class="node-button"></div>
+                              <div class="node-name">{{node.name}}</div>
+                              <div class="node-value">{{node.value}}</div>
+                          </div>
+                      </mat-tree-node>
 
-                        <mat-tree-node *matTreeNodeDef="let node;when: hasChild"
-                            class="node-parent level-{{node.level}}">
-                            <div class="node-row">
-                                <button *ngIf="node.expandable"
-                                    class="node-button"
-                                    mat-icon-button
-                                    matTreeNodeToggle
-                                    [attr.aria-label]="'toggle ' + node.name">
-                                    <mat-icon class="mat-icon-rtl-mirror">
-                                        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-                                    </mat-icon>
-                                </button>
-                                <div class="node-name">{{node.name}}</div>
-                            </div>
-                        </mat-tree-node>
-                    </mat-tree>
-                </div>
-            </div>
-        </div>
-        <canvas (keypress)="keyPressListener($event)" (click)="inCanvasClick($event)" class="model"
-            id="glcanvas"></canvas>
-    </div>
+                      <mat-tree-node *matTreeNodeDef="let node;when: hasChild"
+                          class="node-parent level-{{node.level}}">
+                          <div class="node-row">
+                              <button *ngIf="node.expandable"
+                                  class="node-button"
+                                  mat-icon-button
+                                  matTreeNodeToggle
+                                  [attr.aria-label]="'toggle ' + node.name">
+                                  <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                  </mat-icon>
+                              </button>
+                              <div class="node-name">{{node.name}}</div>
+                          </div>
+                      </mat-tree-node>
+                  </mat-tree>
+              </div>
+          </div>-->
+      </div>
+      <canvas (keypress)="keyPressListener($event)" (click)="inCanvasClick($event)" class="model"
+          id="glcanvas"></canvas>
+  </div>
 </div>

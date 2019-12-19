@@ -16,7 +16,7 @@ import { takeUntil } from 'rxjs/operators';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
-import { IFCObject } from '../../sqlite-orm/src/ifcObject/ifcObjectEntity';
+import { IFCObject } from './classes/ifcObjectEntity';
 
 export interface Direction {
     value: string;
@@ -114,20 +114,8 @@ export class AppComponent implements AfterViewInit {
 
     inCanvasClick(event) {
       if (this.bimServerViewer.viewer.selectedElements.size) {
-        console.log(this.bimServerViewer.viewer.selectedElements._set);
-        createConnection(/*{
-              type: 'sqlite',
-              database: '../assets/database.db',
-              entities: [
-                IFCObject
-              ],
-              synchronize: true,
-              logging: false
-            }*/).then(async connection => {
-          const ifcObjectRepository = connection.getRepository(IFCObject);
-          const ifcObject = await ifcObjectRepository.findOne({oid: this.bimServerViewer.viewer.selectedElements._set[0]});
-          console.log(ifcObject);
-        }).catch(error => console.log(error));
+        console.log('selected elements right now: ', this.bimServerViewer.viewer.selectedElements._set);
+
       }
     }
 

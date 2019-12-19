@@ -12,10 +12,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { BimPropertyListService } from './bim-property-list.service';
 import {HttpClientModule} from '@angular/common/http';
+import { BimPropertyListComponent } from './bim-property-list/bim-property-list.component';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        BimPropertyListComponent
     ],
     imports: [
         BrowserModule,

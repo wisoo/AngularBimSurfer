@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm';
+import {BimPropertyListModel} from '../bim-property.model';
 
 @Entity()
 export class IFCObject {
@@ -21,10 +22,9 @@ export class IFCObject {
   @Column()
   sectionPiece: string;
   @Column({
-    length: 500
+    type: 'text'
   })
-  properties: string;
-
+  properties: BimPropertyListModel;
   constructor(oid: number,
               ifcId: string,
               name: string,
@@ -34,7 +34,7 @@ export class IFCObject {
               sectionBatiment: string,
               sectionEtage: string,
               sectionPiece: string,
-              properties: string) {
+              properties: BimPropertyListModel) {
     this.properties = properties;
     this.ifcId = ifcId;
     this.oid = oid;
@@ -45,5 +45,19 @@ export class IFCObject {
     this.sectionAppartement = sectionAppartement;
     this.name = name;
     this.sectionAnnexePiece = sectionAnnexePiece;
+  }
+
+  public static fromJson(json: Object): IFCObject {
+    return new IFCObject(
+      json['oid'],
+      json['ifcId'],
+      json['name'],
+      json['SectionNature'] ,
+      json['sectionAnnexePiece'],
+      json['sectionAppartement'],
+      json['sectionBatiment'],
+      json['sectionEtage'],
+      json['sectionPiece'],
+      json['properties']);
   }
 }

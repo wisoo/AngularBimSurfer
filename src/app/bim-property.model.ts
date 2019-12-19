@@ -1,15 +1,18 @@
 export class BimPropertyListModel {
-    oid: string;
     properties: BimPropertyModel[];
+    quantities: BimPropertyModel[];
 }
 
 export class BimPropertyModel {
     name: string;
-    value: string;
-    children: BimPropertyModel[];
+    value: string | number | BimPropertyModel[];
 }
 
 export class BimPropertyNodeModel {
     constructor(
-        public expandable: boolean, public name: string, public level: number, public value: any) { }
+        public expandable: boolean,
+        public name: string,
+        public level: number,
+        public value: any) {
+    }
 }
