@@ -10,14 +10,17 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import {DataService} from './bim-property-list/ifcObject-data.service';
 import { BimPropertyListService } from './bim-property-list.service';
 import {HttpClientModule} from '@angular/common/http';
 import { BimPropertyListComponent } from './bim-property-list/bim-property-list.component';
+import {Data} from '@angular/router';
+import {DataResource} from './resources/ifc-object-resource';
 
 @NgModule({
     declarations: [
         AppComponent,
-        BimPropertyListComponent
+        BimPropertyListComponent,
     ],
     imports: [
         BrowserModule,
@@ -33,9 +36,10 @@ import { BimPropertyListComponent } from './bim-property-list/bim-property-list.
     exports: [
         MatIconModule,
         MatTreeModule,
-        MatTableModule
+        MatTableModule,
+
     ],
-    providers: [BimPropertyListService, BimMeasureUnitHelper],
+    providers: [BimPropertyListService, DataService, BimMeasureUnitHelper, DataResource],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

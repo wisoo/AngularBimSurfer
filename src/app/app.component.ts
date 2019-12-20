@@ -17,6 +17,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import { IFCObject } from './classes/ifcObjectEntity';
+import {DataService} from './bim-property-list/ifcObject-data.service';
 
 export interface Direction {
     value: string;
@@ -63,29 +64,29 @@ export class AppComponent implements AfterViewInit {
     private animationEnabled: boolean;
 
     constructor(
-        private bimPropertyListService: BimPropertyListService,
+        private bimPropertyListService: DataService,
         private bimMeasureUnitHelper: BimMeasureUnitHelper,
         private http: HttpClient) {
         console.log('this is the constructor console.log working');
-        this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
-            this.isExpandable, this.getChildren);
-        this.treeControl = new FlatTreeControl<BimPropertyNodeModel>(this.getLevel, this.isExpandable);
-        this.properties = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+        // this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
+        //    this.isExpandable, this.getChildren);
+        // this.treeControl = new FlatTreeControl<BimPropertyNodeModel>(this.getLevel, this.isExpandable);
+        // this.properties = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
         this.animationEnabled = true;
         this.isSectionDirection = true;
     }
 
-    transformer = (node: BimPropertyModel, level: number) => {
-        return new BimPropertyNodeModel(!!node.children, node.name, level, node.value);
-    }
+    // transformer = (node: BimPropertyModel, level: number) => {
+    //    return new BimPropertyNodeModel(!!node.children, node.name, level, node.value);
+    // }
 
-    hasChild = (_: number, _nodeData: BimPropertyNodeModel) => _nodeData.expandable;
+    // hasChild = (_: number, _nodeData: BimPropertyNodeModel) => _nodeData.expandable;
 
-    private getChildren = (node: BimPropertyModel): Observable<BimPropertyModel[]> => observableOf(node.children);
+    // private getChildren = (node: BimPropertyModel): Observable<BimPropertyModel[]> => observableOf(node.children);
 
-    private getLevel = (node: BimPropertyNodeModel) => node.level;
-
-    private isExpandable = (node: BimPropertyNodeModel) => node.expandable;
+    // private getLevel = (node: BimPropertyNodeModel) => node.level;
+    //
+    // private isExpandable = (node: BimPropertyNodeModel) => node.expandable;
 
     ngAfterViewInit() {
         this.login();
@@ -101,11 +102,11 @@ export class AppComponent implements AfterViewInit {
 
         this.translations['TOTAL_SHAPE_VOLUME'] = 'TOTAL_SHAPE_VOLUME';
 
-        this.bimPropertyListService.propertiesLoaded
+        /* this.bimPropertyListService.propertiesLoaded
             .pipe(takeUntil(this.unsubscribe))
             .subscribe((data: BimPropertyModel[]) => {
                 this.setDataSource(data);
-            });
+            }); */
     }
 
     onLoginClick() {
@@ -164,7 +165,7 @@ export class AppComponent implements AfterViewInit {
 
     private loadModel(documentName: string) {
         this.dataSource = undefined;
-        this.bimPropertyListService.showElementProperties([]);
+        // this.bimPropertyListService.showElementProperties([]);
 
         this.getProjectByName(documentName, (project: any) => {
             this.getTotalPrimitives([project.roid]).then((totalPrimitives: number) => {
@@ -175,7 +176,7 @@ export class AppComponent implements AfterViewInit {
 
     private clear() {
         this.dataSource = undefined;
-        this.bimPropertyListService.clear();
+        // this.bimPropertyListService.clear();
 
         if (this.bimServerViewer) {
             const nodes = this.bimServerViewer.viewer.overlay.nodes;
@@ -253,7 +254,7 @@ export class AppComponent implements AfterViewInit {
 
                 this.roid = project.lastRevisionId;
                 this.loadUnits(model);
-                this.bimPropertyListService.setModel(model);
+                // this.bimPropertyListService.setModel(model);
                 this.bimServerViewer = new BimServerViewer(
                     {
                         triangleThresholdDefaultLayer: totalPrimitives,
@@ -295,12 +296,12 @@ export class AppComponent implements AfterViewInit {
      */
     private onSelectionChanged(elements: number[], isSelected: boolean) {
         if (elements && elements.length > 0 && isSelected) {
-            this.bimPropertyListService.showElementProperties(elements);
+            this.bimPropertyListService.getObject(elements[0]);
             this.getGeometryInfo(elements[0]);
 
         } else {
             this.dataSource = undefined;
-            this.bimPropertyListService.showElementProperties([]);
+            // this.bimPropertyListService.showElementProperties([]);
         }
     }
 

@@ -10,7 +10,7 @@ import { BimMeasureType } from './bim-measure-type.enum';
 const defaultLocale = 'cz';
 
 @Injectable()
-export class BimPropertyListService {
+export class BimPropertyListService {/*
 
     propertiesLoadStarted = new BehaviorSubject<boolean>(false);
     propertiesLoaded = new BehaviorSubject<BimPropertyModel[]>(null);
@@ -545,5 +545,5 @@ export class BimPropertyListService {
             ret.push(propertySet);
         });
         return ret;
-    }
+    }*/
 }
