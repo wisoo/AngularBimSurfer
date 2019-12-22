@@ -18,10 +18,6 @@ export class BimPropertyListComponent implements OnInit {
   constructor(public dataService: DataService) {
   }
   ngOnInit() {
-    this.bimProperties = this.dataService.properties;
-    this.dataService.getValue().subscribe((value) => {
-      console.log('value changed: ', value);
-      this.ifcObject = value;
-    });
+    this.dataService.getObject(null)
   }
 }
