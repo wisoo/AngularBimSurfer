@@ -1,5 +1,5 @@
 export class BimPropertyListModel {
-    properties: BimPropertyModel[];
+    properties?: BimPropertyModel[];
     quantities: BimPropertyModel[];
 }
 
