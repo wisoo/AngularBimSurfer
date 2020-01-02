@@ -13,6 +13,7 @@ export class DataResource {
   constructor(protected http: HttpClient) {}
 
   public getObject(oid): Observable<IFCObject> {
+    console.log('request sent to srv, oid:', oid);
     const url = 'http://localhost:3000/ifcObject/' + oid.toString();
     return this.http.get<IFCObject>(url);
   }

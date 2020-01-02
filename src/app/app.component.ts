@@ -36,7 +36,7 @@ export class AppComponent implements AfterViewInit {
     documentId = '';
     projectsInfo: ProjectInfo[] = [];
     bimServerClient: BimServerClient;
-    bimServerViewer: BimServerViewer;
+    public bimServerViewer: BimServerViewer;
     camera: any;
     progress = 0;
     isSectionDirection: boolean;
@@ -116,7 +116,8 @@ export class AppComponent implements AfterViewInit {
     inCanvasClick(event) {
       if (this.bimServerViewer.viewer.selectedElements.size) {
         console.log('selected elements right now: ', this.bimServerViewer.viewer.selectedElements._set);
-
+        console.log('app component ts initiating request with oid ', this.bimServerViewer.viewer.selectedElements._set.values().next().value)
+        this.bimPropertyListService.getObject(this.bimServerViewer.viewer.selectedElements._set.values().next().value);
       }
     }
 

@@ -1,4 +1,4 @@
-import { Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError, BehaviorSubject} from 'rxjs';
 import {IFCObject} from '../classes/ifcObjectEntity';
@@ -9,14 +9,15 @@ import {DataResource} from '../resources/ifc-object-resource';
 @Injectable({providedIn: 'root'})
 export class DataService {
   private ifcObject: BehaviorSubject<IFCObject> = new BehaviorSubject(null);
-  public readonly  ifcObject$: Observable<IFCObject> = this.ifcObject.asObservable();
+  public readonly ifcObject$: Observable<IFCObject> = this.ifcObject.asObservable();
 
-  public getObject(oid): void {
-    if (oid === null){
-      this.ifcObject.next(new IFCObject(0, '', '', '', '',
+  public getObject(oid) {
+    console.log(oid);
+    if (oid === null) {
+      return this.ifcObject.next(new IFCObject(0, '', '', '', '',
         '' , '', '', '', new BimPropertyListModel()));
     }
-    this.dataResource.getObject(oid).subscribe(ifcObject => this.ifcObject.next(ifcObject));
+    return this.dataResource.getObject(oid).subscribe((ifcObject) => this.ifcObject.next(ifcObject));
   }
   constructor(protected http: HttpClient, protected dataResource: DataResource) {
   }
