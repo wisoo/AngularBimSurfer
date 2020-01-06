@@ -15,9 +15,11 @@ import {retryWhen, tap} from 'rxjs/operators';
 export class BimPropertyListComponent implements OnInit {
   bimProperties: BimPropertyListModel = null;
   treeControl = new NestedTreeControl<BimPropertyModel>(node => node.children);
-  dataSource = new MatTreeNestedDataSource<BimPropertyModel>();
+  propertiesDataSource = new MatTreeNestedDataSource<BimPropertyModel>();
+  quantitiesDataSource = new MatTreeNestedDataSource<BimPropertyModel>();
   constructor(public dataService: DataService) {
-    this.dataSource.data =  [new BimPropertyModel('properties', {})];
+    this.propertiesDataSource.data =  [new BimPropertyModel('properties', {})];
+    this.quantitiesDataSource.data =  [new BimPropertyModel('properties', {})];
   }
   hasChild = (_: number, node: BimPropertyModel) => !!node.children && node.children.length > 0;
   ngOnInit() {
@@ -25,7 +27,8 @@ export class BimPropertyListComponent implements OnInit {
       (ifcObject: IFCObject) => {
         if (ifcObject != null) {
           console.log('bimpropertylist ifcObject:', ifcObject);
-          this.updateDatasource(ifcObject);
+          this.updatePropertiesDatasource(ifcObject);
+          this.updateQuantitiesDatasource(ifcObject);
         } else {
           console.log('bimpropertylist ISNULL');
         }
@@ -37,8 +40,12 @@ export class BimPropertyListComponent implements OnInit {
         console.log('Observable complete!');
       });
   }
-  updateDatasource(ifcObject: IFCObject) {
-    this.dataSource.data = ifcObject.properties.properties;
+  updatePropertiesDatasource(ifcObject: IFCObject) {
+    this.propertiesDataSource.data = ifcObject.properties.properties;
     console.log(ifcObject.properties.properties);
+  }
+  updateQuantitiesDatasource(ifcObject: IFCObject) {
+    this.quantitiesDataSource.data = ifcObject.properties.quantities;
+    console.log(ifcObject.properties.quantities);
   }
 }

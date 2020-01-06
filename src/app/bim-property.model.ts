@@ -1,7 +1,9 @@
 export class BimPropertyListModel {
     properties: BimPropertyModel[];
-    constructor(properties = [new BimPropertyModel('name', 'test')]) {
+    quantities: BimPropertyModel[];
+    constructor(properties = [new BimPropertyModel('name', 'test')], quantities = [new BimPropertyModel('name', 'test')]) {
       this.properties = properties;
+      this.quantities = quantities;
     }
 }
 
