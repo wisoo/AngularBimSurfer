@@ -69,9 +69,28 @@
 
     <div class="model-container">
         <div class="left">
-          <app-bim-property-list class="top">
-            <div></div>
-          </app-bim-property-list>
+          <mat-tab-group>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon">build</mat-icon>
+                  Propriétés et Quantités
+              </ng-template>
+              <app-bim-property-list class="top">
+                <div></div>
+              </app-bim-property-list>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon">layers</mat-icon>
+                  Calques
+              </ng-template>
+
+              <app-layers-selector>
+                  <div></div>
+              </app-layers-selector>
+            </mat-tab>
+          </mat-tab-group>
             <!--<div class="top">
                 <div class="header">
                     <h4 class="mat-h4"></h4>

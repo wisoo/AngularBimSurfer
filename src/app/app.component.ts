@@ -18,6 +18,8 @@ import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import { IFCObject } from './classes/ifcObjectEntity';
 import {DataService} from './bim-property-list/ifcObject-data.service';
+import {LayersSelectorComponent} from './layers-selector/layers-selector.component';
+import {LayerService} from './layers-selector/layer.service';
 
 export interface Direction {
     value: string;
@@ -65,6 +67,7 @@ export class AppComponent implements AfterViewInit {
 
     constructor(
         private bimPropertyListService: DataService,
+        private layersSelectorService: LayerService,
         private bimMeasureUnitHelper: BimMeasureUnitHelper,
         private http: HttpClient) {
         console.log('this is the constructor console.log working');
@@ -116,7 +119,8 @@ export class AppComponent implements AfterViewInit {
     inCanvasClick(event) {
       if (this.bimServerViewer.viewer.selectedElements.size) {
         console.log('selected elements right now: ', this.bimServerViewer.viewer.selectedElements._set);
-        console.log('app component ts initiating request with oid ', this.bimServerViewer.viewer.selectedElements._set.values().next().value)
+        console.log('app component ts initiating request with oid ',
+          this.bimServerViewer.viewer.selectedElements._set.values().next().value);
         this.bimPropertyListService.getObject(this.bimServerViewer.viewer.selectedElements._set.values().next().value);
       }
     }
@@ -282,12 +286,14 @@ export class AppComponent implements AfterViewInit {
                     });
                   }
                 });
+                this.layersSelectorService.getLayers();
                 this.bimServerViewer.loadModel(this.bimServerClient, project).then((data: any) => {
                     const bimSurfer = this.bimServerViewer.viewer;
                     bimSurfer.eventHandler.on('selection_state_changed', (elements: any, isSelected: boolean) => {
                         console.log('hi !');
                         this.onSelectionChanged(elements, isSelected);
                     });
+
                 });
             });
         });

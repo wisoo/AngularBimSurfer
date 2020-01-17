@@ -16,28 +16,33 @@ import {HttpClientModule} from '@angular/common/http';
 import { BimPropertyListComponent } from './bim-property-list/bim-property-list.component';
 import {Data} from '@angular/router';
 import {DataResource} from './resources/ifc-object-resource';
+import { LayersSelectorComponent } from './layers-selector/layers-selector.component';
+import {MatCheckboxModule, MatTabsModule} from '@angular/material';
 
 @NgModule({
     declarations: [
         AppComponent,
         BimPropertyListComponent,
+        LayersSelectorComponent,
     ],
-    imports: [
-        BrowserModule,
-        FormsModule,
-        MatSelectModule,
-        BrowserAnimationsModule,
-        MatTableModule,
-        MatTreeModule,
-        MatIconModule,
-        MatButtonModule,
-        HttpClientModule
-    ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    MatSelectModule,
+    BrowserAnimationsModule,
+    MatTableModule,
+    MatTreeModule,
+    MatIconModule,
+    MatButtonModule,
+    HttpClientModule,
+    MatTabsModule,
+    MatCheckboxModule
+  ],
     exports: [
         MatIconModule,
         MatTreeModule,
         MatTableModule,
-
+        MatCheckboxModule
     ],
     providers: [BimPropertyListService, DataService, BimMeasureUnitHelper, DataResource],
     bootstrap: [AppComponent]
