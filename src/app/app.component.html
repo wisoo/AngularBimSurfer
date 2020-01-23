@@ -58,7 +58,9 @@
                 </mat-form-field>
             </div>
         </div>
-
+      <div class="login-container">
+        <app-login></app-login>
+      </div>
         <div class="project-container">
             <p>Projects:</p>
             <p class="project"
@@ -68,91 +70,28 @@
     </div>
 
     <div class="model-container">
-        <div class="left">
-          <mat-tab-group>
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <mat-icon class="example-tab-icon">build</mat-icon>
-                  Propriétés et Quantités
-              </ng-template>
-              <app-bim-property-list class="top">
-                <div></div>
-              </app-bim-property-list>
-            </mat-tab>
+      <div class="left">
+        <mat-tab-group>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="example-tab-icon">build</mat-icon>
+                Propriétés et Quantités
+            </ng-template>
+            <app-bim-property-list class="top">
+              <div></div>
+            </app-bim-property-list>
+          </mat-tab>
 
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <mat-icon class="example-tab-icon">layers</mat-icon>
-                  Calques
-              </ng-template>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="example-tab-icon">layers</mat-icon>
+                Calques
+            </ng-template>
 
-              <app-layers-selector>
-                  <div></div>
-              </app-layers-selector>
-            </mat-tab>
-          </mat-tab-group>
-            <!--<div class="top">
-                <div class="header">
-                    <h4 class="mat-h4"></h4>
-                </div>
-                <mat-table [dataSource]="dataSource">
-                    <ng-container matColumnDef="name">
-                        <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="value">
-                        <mat-cell *matCellDef="let row">
-                            {{ row.value }}
-                        </mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="measureUnit">
-                        <mat-cell *matCellDef="let row">
-                            <span>{{getMeasureUnit(row.type)}}</span>
-                        </mat-cell>
-                    </ng-container>
-
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"
-                        class="no-selection">
-                    </mat-row>
-                </mat-table>
-            </div>-->
-          <!--<div class="bottom">
-              <div class="header">
-                  <h4 class="mat-h4"></h4>
-              </div>
-              <div class="kros-property-list-container container">
-                  <mat-tree [dataSource]="properties"
-                      [treeControl]="treeControl"
-                      *ngIf="properties.data"
-                      class="content">
-                      <mat-tree-node *matTreeNodeDef="let node"
-                          class="node-children level-{{node.level}}">
-                          <div class="node-row">
-                              <div class="node-button"></div>
-                              <div class="node-name">{{node.name}}</div>
-                              <div class="node-value">{{node.value}}</div>
-                          </div>
-                      </mat-tree-node>
-
-                      <mat-tree-node *matTreeNodeDef="let node;when: hasChild"
-                          class="node-parent level-{{node.level}}">
-                          <div class="node-row">
-                              <button *ngIf="node.expandable"
-                                  class="node-button"
-                                  mat-icon-button
-                                  matTreeNodeToggle
-                                  [attr.aria-label]="'toggle ' + node.name">
-                                  <mat-icon class="mat-icon-rtl-mirror">
-                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-                                  </mat-icon>
-                              </button>
-                              <div class="node-name">{{node.name}}</div>
-                          </div>
-                      </mat-tree-node>
-                  </mat-tree>
-              </div>
-          </div>-->
+            <app-layers-selector class="top">
+            </app-layers-selector>
+          </mat-tab>
+        </mat-tab-group>
       </div>
       <canvas (keypress)="keyPressListener($event)" (click)="inCanvasClick($event)" class="model"
           id="glcanvas"></canvas>

@@ -26,26 +26,20 @@ export class BimPropertyListComponent implements OnInit {
     const ifcObjectSubscription = this.dataService.ifcObject$.subscribe(
       (ifcObject: IFCObject) => {
         if (ifcObject != null) {
-          console.log('bimpropertylist ifcObject:', ifcObject);
           this.updatePropertiesDatasource(ifcObject);
           this.updateQuantitiesDatasource(ifcObject);
-        } else {
-          console.log('bimpropertylist ISNULL');
         }
       },
       (error) => {
         console.log('Uh-oh, an error occurred! : ' + error);
       },
       () => {
-        console.log('Observable complete!');
       });
   }
   updatePropertiesDatasource(ifcObject: IFCObject) {
     this.propertiesDataSource.data = ifcObject.properties.properties;
-    console.log(ifcObject.properties.properties);
   }
   updateQuantitiesDatasource(ifcObject: IFCObject) {
     this.quantitiesDataSource.data = ifcObject.properties.quantities;
-    console.log(ifcObject.properties.quantities);
   }
 }

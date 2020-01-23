@@ -1,0 +1,16 @@
+<form class="example-form">
+  <mat-form-field [hideRequiredMarker]="false" [floatLabel]="true" mat-ripple appearance="legacy" class="form-field" required>
+    <input matNativeControl placeholder="Enter your email">
+    <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field [hideRequiredMarker]="false" [floatLabel]="true" mat-ripple appearance="legacy" class="form-field" required>
+    <input matNativeControl  placeholder="Enter your password">
+    <button mat-icon-button matSuffix>
+      <mat-icon></mat-icon>
+    </button>
+  </mat-form-field>
+
+  <button mat-stroked-button color=accent class="btn-block">Log in</button>
+</form>
+

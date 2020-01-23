@@ -1,0 +1,12 @@
+.form-container {
+  display: inline-block;
+  width: 100%;
+  flex-direction: row;
+  .form-field {
+    width: 50%;
+    margin: 1%;
+    display: inline-block;
+  }
+}
+.mat-stroked-button{border:1px solid #b35e00;line-height:34px;background: #b35e00;}
+

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Layer, LayerService} from './layer.service';
+import {Layer, Layers, LayerService} from './layer.service';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {IFCObject} from '../classes/ifcObjectEntity';
@@ -14,11 +14,11 @@ import {SelectionModel} from '@angular/cdk/collections';
   styleUrls: ['./layers-selector.component.scss']
 })
 export class LayersSelectorComponent implements OnInit {
-  layers: LayersListModel = null;
+  layerListModel: LayersListModel = null;
   treeControl = new NestedTreeControl<LayerModel>(node => node.children);
   dataSource = new MatTreeNestedDataSource<LayerModel>();
   constructor(public dataService: LayerService) {
-    this.dataSource.data =  [new LayerModel('GOE', false)];
+    this.dataSource.data = null;
   }
   checklistSelection = new SelectionModel<LayerModel>(true /* multiple */);
 
@@ -28,24 +28,28 @@ export class LayersSelectorComponent implements OnInit {
 
   ngOnInit() {
     const layersSubscription = this.dataService.layers$.subscribe(
-      (layers: Layer[]) => {
+      (layers: Layers) => {
         if (layers != null) {
-          console.log('layers:', layers);
           this.updateDatasource(layers);
-        } else {
-          console.log('layer list ISNULL');
+          this.sendActiveLayers();
         }
       },
       (error) => {
         console.log('Uh-oh, an error occurred! : ' + error);
       },
       () => {
-        console.log('Observable complete!');
       });
   }
-  updateDatasource(layers: Layer[]) {
-    console.log(layers);
-    console.log(' pouet ');
+  updateDatasource(layers: Layers) {
+    this.layerListModel = new LayersListModel();
+
+    for (const layer of layers.layers) {
+      const newLayer = new LayerModel(layer.calque, null);
+      newLayer.children = null;
+      this.layerListModel.layers.push(newLayer);
+    }
+    this.dataSource.data = this.layerListModel.layers;
+    this.checklistSelection.select(...this.layerListModel.layers);
   }
 
   /** Whether all the descendants of the node are selected */
@@ -64,9 +68,23 @@ export class LayersSelectorComponent implements OnInit {
   /** Toggle the to-do item selection. Select/deselect all the descendants node */
   todoItemSelectionToggle(node: LayerModel): void {
     this.checklistSelection.toggle(node);
-    const descendants = this.treeControl.getDescendants(node);
-    this.checklistSelection.isSelected(node)
-      ? this.checklistSelection.select(...descendants)
-      : this.checklistSelection.deselect(...descendants);
+    this.sendActiveLayers();
+  }
+
+  sendActiveLayers(): void {
+    // send ActiveLayers to subscribers via observable subject
+    this.dataService.sendActiveLayers(this.checklistSelection.selected);
+  }
+
+  clearActiveLayers(): void {
+    // clear ActiveLayers
+    this.dataService.clearActiveLayers();
+  }
+
+  sendOidsByLayers(): void {
+    // send layer-oids map
+    this.dataService.sendLayerOidsMap();
   }
 }
+
+

@@ -13,7 +13,6 @@ export class DataService implements OnDestroy {
   private dataResourceSubscription: Subscription;
 
   public getObject(oid) {
-    console.log(oid);
     if (oid === null) {
       return new IFCObject(0, '', '', '', '',
         '' , '', '', '', new BimPropertyListModel());
@@ -21,15 +20,12 @@ export class DataService implements OnDestroy {
 
     this.dataResourceSubscription = this.dataResource.getObject(oid).subscribe(
       (ifcObject) => {
-        console.log('dataservice ifcObject:', ifcObject)
         this.ifcObject.next(ifcObject);
       },
       (error) => {
         console.log('Uh-oh, an error occurred! : ' + error);
       },
-      () => {
-        console.log('Observable complete!');
-      });
+      () => {});
     return this.ifcObject$;
   }
 

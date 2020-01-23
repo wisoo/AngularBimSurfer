@@ -1,17 +1,15 @@
 export class LayersListModel {
   layers: LayerModel[];
-  constructor(layers = [new LayerModel('name', 'test')]) {
+  constructor(layers = []) {
     this.layers = layers;
   }
 }
 
 export class LayerModel {
   name: string;
-  checked: boolean;
   children?: LayerModel[];
-  constructor(name, checked, children = null) {
+  constructor(name, children = null) {
     this.name = name;
-    this.checked = checked;
     this.children = children;
   }
 }
