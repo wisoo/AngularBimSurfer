@@ -1,99 +1,109 @@
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+<!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
     rel="stylesheet">
-<div class="container">
-    <div class="main-container">
-        <div class="login-container">
-            <div class="login"
-                *ngIf="true">
-                <div class="login-info">
-                    <p class="login-label">BIM server address:</p>
-                    <input class="input"
-                        type="text"
-                        placeholder="example: localhost:8082"
-                        [(ngModel)]="env.apiUrl">
-                </div>
-                <div class="login-info">
-                    <p class="login-label"> User: </p>
-                    <input class="input"
-                        type="text"
-                        placeholder="example: email@email.com"
-                        [(ngModel)]="env.login">
-                </div>
-                <div class="login-info">
-                    <p class="login-label"> Password: </p>
-                    <input class="input"
-                        type="text"
-                        placeholder="example: YourPassWord"
-                        [(ngModel)]="env.password">
-                </div>
-            </div>
-
-            <div class="document">
-                <div class="login-info" *ngIf="false" >
-                    <p class="login-label" > Document id: </p>
-                    <input class="input"
-                        type="text"
-                        placeholder="example: documents/1-A"
-                        [(ngModel)]="documentId">
-                </div>
-
-                <div class="login-button">
-                    <button (click)="onLoginClick()">Login</button>
-                    <div class="progress">
-                        <p>Actual progress: {{progress}}%</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sectionPlane"
-                *ngIf="isSectionDirection">
-                <mat-form-field>
-                    <mat-label>Section direction</mat-label>
-                    <mat-select (selectionChange)="onDirectionChange($event)">
-                        <mat-option *ngFor="let direction of directions"
-                            [value]="direction.value">
-                            {{direction.viewValue}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+<div class="container" fxLayout="column" fxFlexFill>
+    <div class="main-container" fxLayout="column" fxFlexFill>
+        <div fxLayout="row"
+             fxLayoutGap="20px"
+             fxLayoutAlign="<main-axis> <cross-axis>"
+             fxFlexFill
+        >
+            <app-login fxLayout="column"
+                       class="login-container"
+                       fxFlex="0 1 calc(25% - 32px)"
+            ></app-login>
+            <mat-divider [vertical]="true"></mat-divider>
+            <div fxLayout="row"
+                 fxLayoutAlign="<main-axis> <cross-axis>"
+                 fxFlex="0 1 calc(70% - 32px)">
+                <mat-card fxFlexFill>
+                  <mat-card-content fxLayout="row">
+                    <button mat-raised-button *ngFor="let info of projectsInfo" (click)="navigateToProject(info)">
+                      <b>{{info.name}}</b>
+                    </button>
+                  </mat-card-content>
+                </mat-card>
             </div>
         </div>
-      <div class="login-container">
-        <app-login></app-login>
-      </div>
-        <div class="project-container">
-            <p>Projects:</p>
-            <p class="project"
-                *ngFor="let info of projectsInfo"
-                (click)="navigateToProject(info)">{{info.poid}}; <b>{{info.name}}</b></p>
+        <mat-divider></mat-divider>
+        <div class="model-container" fxLayout="row" id="model-container" fxFlexFill>
+            <mat-tab-group fxFlex="0 1 calc(25% - 32px)" fxFlexFill>
+                <mat-tab fxFlex="0 1 calc(50%)" fxFlexFill>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="example-tab-icon">build</mat-icon>
+                        Propriétés et Quantités
+                    </ng-template>
+                    <app-bim-property-list class="top" fxLayout="column" fxFlexFill>
+                        <div></div>
+                    </app-bim-property-list>
+                </mat-tab>
+
+                <mat-tab fxFlex="0 1 calc(50%)" fxFlexFill>
+                  <ng-template mat-tab-label>
+                      <mat-icon class="example-tab-icon">layers</mat-icon>
+                      Calques
+                  </ng-template>
+
+                  <app-layers-selector class="top"></app-layers-selector>
+                </mat-tab>
+            </mat-tab-group>
+            <canvas fxFlex="0 1 calc(70% - 32px)" fxFlexFill
+                    (keypress)="keyPressListener($event)" (click)="inCanvasClick($event)" class="model" id="glcanvas">
+            </canvas>
         </div>
     </div>
+</div>-->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+<div class="container">
+  <div class="login-line">
+    <app-login class="login-component"></app-login>
+    <mat-divider [vertical]="true"></mat-divider>
+    <mat-card class="projects-component">
+      <mat-card-content >
+        <button mat-raised-button *ngFor="let info of projectsInfo" (click)="navigateToProject(info)">
+          <b>{{info.name}}</b>
+        </button>
+      </mat-card-content>
+    </mat-card>
+    <mat-divider [vertical]="true"></mat-divider>
+    <mat-form-field class="sectionPlane"
+                    *ngIf="isSectionDirection">
+      <mat-label>Section direction</mat-label>
+      <mat-select (selectionChange)="onDirectionChange($event)">
+        <mat-option *ngFor="let direction of directions"
+                    [value]="direction.value">
+          {{direction.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="model-container" id="model-container">
+    <div class="tab-group-container">
+      <mat-tab-group class="tabgroup mat-tab-fill-height" [dynamicHeight]="false">
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">build</mat-icon>
+            Propriétés et Quantités
+          </ng-template>
+          <app-bim-property-list class="top">
+            <div></div>
+          </app-bim-property-list>
+        </mat-tab>
 
-    <div class="model-container">
-      <div class="left">
-        <mat-tab-group>
-          <mat-tab>
-            <ng-template mat-tab-label>
-              <mat-icon class="example-tab-icon">build</mat-icon>
-                Propriétés et Quantités
-            </ng-template>
-            <app-bim-property-list class="top">
-              <div></div>
-            </app-bim-property-list>
-          </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">layers</mat-icon>
+            Calques
+          </ng-template>
 
-          <mat-tab>
-            <ng-template mat-tab-label>
-              <mat-icon class="example-tab-icon">layers</mat-icon>
-                Calques
-            </ng-template>
-
-            <app-layers-selector class="top">
-            </app-layers-selector>
-          </mat-tab>
-        </mat-tab-group>
-      </div>
-      <canvas (keypress)="keyPressListener($event)" (click)="inCanvasClick($event)" class="model"
-          id="glcanvas"></canvas>
+          <app-layers-selector class="top"></app-layers-selector>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    <div class="canvascontainer">
+      <canvas (keypress)="keyPressListener($event)" (click)="inCanvasClick($event)" class="model" id="glcanvas">
+      </canvas>
+    </div>
   </div>
 </div>

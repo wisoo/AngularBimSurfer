@@ -1,12 +1,11 @@
-.form-container {
-  display: inline-block;
-  width: 100%;
-  flex-direction: row;
-  .form-field {
-    width: 50%;
-    margin: 1%;
-    display: inline-block;
-  }
+.formgroup {
+  display: flex;
+  padding: 5px;
+  flex-flow: row nowrap;
+  align-items: baseline;
 }
-.mat-stroked-button{border:1px solid #b35e00;line-height:34px;background: #b35e00;}
-
+.formgroup > * {
+  margin: 5px;
+  align-content: flex-start;
+  flex-flow: row nowrap;
+}

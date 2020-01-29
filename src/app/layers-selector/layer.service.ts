@@ -3,15 +3,10 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError, BehaviorSubject, Subject, Subscription} from 'rxjs';
 import {LayerResource} from '../resources/layer-resource';
 import {LayerModel} from '../layers.model';
+import {Layers} from '../classes/layer-classes';
 
 
-export class Layer {
-  calque: string;
-}
 
-export class Layers {
-  layers: Array<Layer>;
-}
 
 
 @Injectable({providedIn: 'root'})

@@ -10,6 +10,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
 import { DataService } from './bim-property-list/ifcObject-data.service';
 import { BimPropertyListService } from './bim-property-list.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -20,6 +22,9 @@ import {MatCheckboxModule, MatFormFieldModule, MatRippleModule, MatTabsModule} f
 import { LoginComponent } from './login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import {BimServerClientService} from './bim-server-client.service';
+
 
 @NgModule({
   declarations: [
@@ -29,6 +34,7 @@ import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
     LoginComponent,
   ],
   imports: [
+    FlexLayoutModule,
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserModule,
@@ -44,16 +50,20 @@ import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
     MatButtonModule,
     MatTabsModule,
     MatCheckboxModule,
-    MatRippleModule
+    MatRippleModule,
+    MatDividerModule,
+    MatCardModule
   ],
   exports: [
     MatIconModule,
     MatTreeModule,
     MatTableModule,
     MatCheckboxModule,
-    MatInputModule
+    MatInputModule,
+    ReactiveFormsModule
   ],
   providers: [
+    BimServerClientService,
     BimPropertyListService,
     DataService,
     BimMeasureUnitHelper,

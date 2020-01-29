@@ -1,16 +1,34 @@
-<form class="example-form">
-  <mat-form-field [hideRequiredMarker]="false" [floatLabel]="true" mat-ripple appearance="legacy" class="form-field" required>
-    <input matNativeControl placeholder="Enter your email">
-    <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
+<!--
+<form [formGroup]="credentials" (ngSubmit)="login()"
+      fxLayout="row"
+      fxLayoutGap="20px"
+      fxLayoutAlign="<main-axis> <cross-axis>">
+  <div>
+    <mat-form-field appearance="legacy" matRipple>
+      <input matInput type="email" placeholder="Email address" formControlName="email" autocomplete="on">
+      <mat-error *ngIf="!credentials.controls['email'].valid && credentials.controls['email'].touched">
+        {{ getErrorEmail() }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="legacy" mat-ripple>
+      <input matInput type="password" placeholder="Password" formControlName="password" autocomplete="on">
+    </mat-form-field>
+  </div>
+  <button mat-raised-button type="submit">Login</button>
+</form>
+-->
+<form [formGroup]="credentials" (ngSubmit)="login()" class="formgroup">
+  <mat-form-field appearance="legacy" matRipple>
+    <input matInput type="email" placeholder="Email address" formControlName="email" autocomplete="on">
+    <mat-error *ngIf="!credentials.controls['email'].valid && credentials.controls['email'].touched">
+      {{ getErrorEmail() }}
+    </mat-error>
   </mat-form-field>
-
-  <mat-form-field [hideRequiredMarker]="false" [floatLabel]="true" mat-ripple appearance="legacy" class="form-field" required>
-    <input matNativeControl  placeholder="Enter your password">
-    <button mat-icon-button matSuffix>
-      <mat-icon></mat-icon>
-    </button>
-  </mat-form-field>
-
-  <button mat-stroked-button color=accent class="btn-block">Log in</button>
+    <mat-form-field appearance="legacy" mat-ripple>
+      <input matInput type="password" placeholder="Password" formControlName="password" autocomplete="on">
+    </mat-form-field>
+  <button mat-raised-button type="submit">Login</button>
 </form>
 

@@ -20,6 +20,9 @@ import { IFCObject } from './classes/ifcObjectEntity';
 import {DataService} from './bim-property-list/ifcObject-data.service';
 import {LayersSelectorComponent} from './layers-selector/layers-selector.component';
 import {LayerService} from './layers-selector/layer.service';
+import {CredentialsService} from './login/credentials-service';
+import {BimServerClientService} from './bim-server-client.service';
+import {stringify} from 'querystring';
 
 export interface Direction {
     value: string;
@@ -35,14 +38,16 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   allLayers: any[];
   activeLayers: any[] = [];
   oldActiveLayers: any[];
-  subscription: Subscription;
+  layerSubscription: Subscription;
   layerOidsMap: Map<string, Array<Number>>;
-  layerOidsMapSubscription: Subscription;
-
+  layerOidsMaplayerSubscription: Subscription;
+  credentials: {email: string, pwd: string};
+  credentialsSubscription: Subscription;
   env = environment;
   title = 'bim-surfer';
   documentId = '';
   projectsInfo: ProjectInfo[] = [];
+  projectSubscription: Subscription;
   bimServerClient: BimServerClient;
   public bimServerViewer: BimServerViewer;
   camera: any;
@@ -72,6 +77,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   private animationEnabled: boolean;
 
   constructor(
+    private credentialsService: CredentialsService,
     private bimPropertyListService: DataService,
     private layersSelectorService: LayerService,
     private bimMeasureUnitHelper: BimMeasureUnitHelper,
@@ -80,7 +86,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.isSectionDirection = true;
 
     // subscribe to home component messages
-    this.subscription = this.layersSelectorService.getActiveLayers().subscribe(layers => {
+    this.layerSubscription = this.layersSelectorService.getActiveLayers().subscribe(layers => {
       if (layers) {
         this.activeLayers = layers;
         if (typeof this.allLayers === 'undefined') {
@@ -95,18 +101,25 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         this.activeLayers = [];
       }
     });
-    this.layerOidsMapSubscription = this.layersSelectorService.getLayerOidsMap().subscribe(layerOidsMap => {
+    this.layerOidsMaplayerSubscription = this.layersSelectorService.getLayerOidsMap().subscribe(layerOidsMap => {
       if (layerOidsMap) {
         this.layerOidsMap = layerOidsMap;
       } else {
         this.layerOidsMap = new Map();
       }
     });
-
+    this.projectSubscription = this.credentialsService.getProjects().subscribe(projects => {
+      if (projects) {
+        console.log('got projects from credentialsService');
+        this.projectsInfo = projects;
+      } else {
+        // clear messages when empty message received
+        this.projectsInfo = [];
+      }
+    });
   }
 
   ngAfterViewInit() {
-    this.login();
     this.translations['BOUNDING_BOX_SIZE_ALONG_X'] = 'BOUNDING_BOX_SIZE_ALONG_X';
     this.translations['BOUNDING_BOX_SIZE_ALONG_Y'] = 'BOUNDING_BOX_SIZE_ALONG_Y';
     this.translations['BOUNDING_BOX_SIZE_ALONG_Z'] = 'BOUNDING_BOX_SIZE_ALONG_Z';
@@ -124,10 +137,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         .subscribe((data: BimPropertyModel[]) => {
             this.setDataSource(data);
         }); */
-  }
-
-  onLoginClick() {
-      this.login();
   }
 
   inCanvasClick(event) {
@@ -149,8 +158,34 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       this.loadModel(this.documentId);
   }
 
+
   navigateToProject(info: ProjectInfo) {
-      this.loadModel(info.name);
+    console.log('clicked on button ', info);
+    this.bimServerClient = BimServerClientService.getInstance();
+    this.loadModel(info.name);
+  }
+
+  private loadModel(documentName: string) {
+    this.dataSource = undefined;
+    this.getProjectByName(documentName, (project: any) => {
+      this.getTotalPrimitives([project.roid]).then((totalPrimitives: number) => {
+        this.loadProject(project.oid, totalPrimitives + 10000);
+      });
+    });
+  }
+
+  private getTotalPrimitives(roids: any): any {
+    return new Promise((resolve, reject) => {
+      this.bimServerClient.call('ServiceInterface', 'getNrPrimitivesTotal', { roids: roids }, (totalPrimitives: any) => {
+        resolve(totalPrimitives);
+      });
+    });
+  }
+
+  private getProjectByName(documentName: string, callback: any) {
+    this.bimServerClient.call('ServiceInterface', 'getProjectsByName', { name: documentName }, (projects: any) => {
+      callback({ oid: projects[0].oid, roid: projects[0].lastRevisionId });
+    }, (error: any) => this.errorCallBack(error));
   }
 
   getObjectsStates(address, phase) {
@@ -178,16 +213,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       }
   }
 
-  private loadModel(documentName: string) {
-      this.dataSource = undefined;
-      // this.bimPropertyListService.showElementProperties([]);
 
-      this.getProjectByName(documentName, (project: any) => {
-          this.getTotalPrimitives([project.roid]).then((totalPrimitives: number) => {
-              this.loadProject(project.oid, totalPrimitives + 10000);
-          });
-      });
-  }
 
   private clear() {
       this.dataSource = undefined;
@@ -203,61 +229,11 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       }
   }
 
-  private login() {
-      this.bimServerClient = new BimServerClient(environment.apiUrl);
-
-      this.bimServerClient.init(() => {
-          this.bimServerClient.login(
-              environment.login,
-              environment.password,
-              () => this.loginCallBack(),
-              (error: any) => console.log(error));
-      });
-  }
-
-  private loginCallBack() {
-      if (environment.production) {
-          this.projectsInfo.push({ name: 'oc_forum', poid: 1 });
-          this.projectsInfo.push({ name: 'tcj', poid: 2 });
-          this.projectsInfo.push({ name: 'lakeside', poid: 3 });
-          this.projectsInfo.push({ name: 'duplex', poid: 4 });
-          this.projectsInfo.push({ name: 'dek_cierny', poid: 5 });
-          this.projectsInfo.push({ name: 'rd_samta', poid: 6 });
-          this.projectsInfo.push({ name: 'kuco', poid: 7 });
-          this.projectsInfo.push({ name: 'schepen', poid: 8 });
-          this.projectsInfo.push({ name: 'kros', poid: 9 });
-          this.projectsInfo.push({ name: 'dek_skladby', poid: 10 });
-          this.projectsInfo.push({ name: 'komora', poid: 11 });
-          this.projectsInfo.push({ name: 'urs_dds', poid: 12 });
-      } else {
-          this.bimServerClient.call('ServiceInterface', 'getAllProjects',
-              { onlyTopLevel: true, onlyActive: true },
-              (projects: any) => this.getAllProjectsCallBack(projects),
-              (error: any) => this.errorCallBack(error)
-          );
-      }
-  }
-
-  private getAllProjectsCallBack(projects: any) {
-    this.projectsInfo = [];
-      projects.slice(0, 10).forEach((project: any) => this.getProjectInfo(project));
-  }
-
-  private getProjectInfo(project: any) {
-      if (project.lastRevisionId !== -1) {
-          this.projectsInfo.push({ name: project.name, poid: project.oid });
-      }
-  }
-
   private errorCallBack(error: any) {
       console.error(error);
   }
 
-  private getProjectByName(documentName: string, callback: any) {
-      this.bimServerClient.call('ServiceInterface', 'getProjectsByName', { name: documentName }, (projects: any) => {
-          callback({ oid: projects[0].oid, roid: projects[0].lastRevisionId });
-      }, (error: any) => this.errorCallBack(error));
-  }
+
 
   private loadProject(poid: number, totalPrimitives: number) {
       this.bimServerClient.call('ServiceInterface', 'getProjectByPoid', {
@@ -274,10 +250,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
                       triangleThresholdDefaultLayer: totalPrimitives,
                       excludedTypes: this.getExludeTypes(project.schema)
                   },
-                  canvas,
-                  canvas.clientWidth,
-                  canvas.clientHeight,
-                  null);
+                  canvas);
               this.bimServerViewer.viewer.addAnimationListener((deltaTime) => {
                 if (this.animationEnabled) {
                   this.bimServerViewer.viewer.camera.orbitYaw(0.05);
@@ -331,14 +304,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         // return ['IfcSpace', 'IfcOpeningElement', 'IfcAnnotation'];
         return ['IfcSpace', 'IfcOpeningElement'];
       }
-  }
-
-  private getTotalPrimitives(roids: any): any {
-      return new Promise((resolve, reject) => {
-          this.bimServerClient.call('ServiceInterface', 'getNrPrimitivesTotal', { roids: roids }, (totalPrimitives: any) => {
-              resolve(totalPrimitives);
-          });
-      });
   }
 
   private getGeometryInfo(oid: number) {
@@ -485,6 +450,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
-    this.subscription.unsubscribe();
+    this.layerSubscription.unsubscribe();
+    this.credentialsSubscription.unsubscribe();
+    this.layerOidsMaplayerSubscription.unsubscribe();
+    this.projectSubscription.unsubscribe();
   }
 }

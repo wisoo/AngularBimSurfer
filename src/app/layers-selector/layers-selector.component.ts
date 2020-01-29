@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Layer, Layers, LayerService} from './layer.service';
+import { LayerService } from './layer.service';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {IFCObject} from '../classes/ifcObjectEntity';
@@ -7,6 +7,7 @@ import * as HTMLStringify from 'html-stringify';
 import {retryWhen, tap} from 'rxjs/operators';
 import {LayerModel, LayersListModel} from '../layers.model';
 import {SelectionModel} from '@angular/cdk/collections';
+import {Layers} from '../classes/layer-classes';
 
 @Component({
   selector: 'app-layers-selector',

@@ -1,246 +1,88 @@
-@import "../styles.scss";
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+* {
+  box-sizing: border-box;
+}
 
 .container {
   display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  padding: 5px;
+}
+
+.login-line {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.login-component {
+  flex-flow: row nowrap;
+  flex: 0 0 auto;
+  align-items: flex-end;
+  margin: 5px;
+}
+
+.projects-component {
+  flex-flow: row nowrap;
+  width: 100%;
+  flex: 0 1 auto;
+  margin: 10px;
+}
+
+.sectionPlane {
+  flex: 0 0 auto;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+.tab-group-container {
+  flex: 1 0 25%;
+ }
+
+.model-container {
+  display: flex;
+  height: 80%;
+}
+
+.tabgroup {
+  margin: 5px;
+  height: 100%;
+}
+
+.mat-tab-group{
+  height: 100%;
+}
+.mat-tab-body-wrapper {
+  flex-grow: 0;
+}
+
+.mat-tab-group.mat-tab-fill-height .mat-tab-body-wrapper {
+  flex: 1 1 100%;
+}
+
+.mat-drawer {
+  overflow-y: scroll
+}
+
+.mat-tab-body {
+  display: flex !important;
   flex-direction: column;
-  height: 98vh;
-  margin: 0px;
+}
 
-  .main-container {
-    display: flex;
-    flex-direction: column;
-    flex: 2;
+.mat-tab-body-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
 
-    .login-container {
-      display: flex;
-      flex-direction: row;
-      flex: 2;
-      background-color: rgba(142, 188, 0, 0.53);
+.canvascontainer {
+  flex-flow: column nowrap;
+  flex: 3 1 75%;
+}
 
-      .login {
-        min-height: 0;
-        display: flex;
-        flex-direction: row;
+.model {
+  display: flex;
+  width: 100%;
+  height: 100%;
 
-        .login-info {
-          min-height: 0;
-          display: flex;
-          flex-direction: row;
-          padding-right: 5px;
-          align-items: center;
-
-          .login-label {
-            padding-right: 5px;
-
-          }
-
-          .input {
-            max-height: 20px;
-            background-color: rgba(142, 188, 0, 0.53);
-
-          }
-        }
-      }
-
-      .document {
-        display: flex;
-        flex: 1;
-        align-items: center;
-        padding-left: 15px;
-        min-height: 0px;
-
-        .login-info {
-          min-height: 0;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-
-          .login-label {
-            padding-right: 5px;
-          }
-
-          .input {
-            max-height: 20px;
-          }
-        }
-
-        p {
-          height: 9px;
-        }
-
-        .login-button {
-          display: flex;
-          align-items: center;
-          padding-left: 5px;
-
-          .progress {
-            padding-left: 10px;
-          }
-        }
-      }
-
-      .sectionPlane {
-        display: flex;
-        align-items: center;
-        padding-left: 15px;
-      }
-    }
-
-    .project-container {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      padding: 10px;
-
-      p {
-        margin-left: 5px;
-        height: 10px;
-      }
-
-      .project {
-        cursor: pointer;
-      }
-
-      .project:hover {
-        color: blue;
-        font-weight: bold;
-      }
-    }
-  }
-
-  .model-container {
-    min-height: 0;
-    display: flex;
-    flex: 9;
-    height: 100%;
-
-    .left {
-      display: flex;
-      flex: 2;
-      flex-direction: column;
-      min-width: 0;
-      padding: 5px;
-
-      .top {
-        flex: 2;
-        border: solid 1px #e0e0e0;
-        margin-bottom: 5px;
-
-        .header {
-          display: flex;
-          flex-direction: row;
-          min-width: 0;
-          padding-left: 10px;
-        }
-
-        mat-table {
-          flex: 1;
-          overflow: auto;
-
-          mat-row {
-            display: flex;
-            flex-direction: row;
-            min-height: 24px;
-            font-size: 12px;
-
-            .cdk-column-name {
-              flex: 0 0 260px;
-              padding-right: 5px;
-            }
-
-            .cdk-column-value {
-              flex: 0 0 80px;
-              padding-right: 5px;
-            }
-
-            .cdk-column-measureUnit {
-              flex: 0 0 10px;
-            }
-          }
-        }
-      }
-
-      .bottom {
-        display: flex;
-        flex: 3;
-        min-height: 0;
-        flex-direction: column;
-        border: solid 1px #e0e0e0;
-
-        .header {
-          display: flex;
-          min-width: 0;
-          padding-left: 10px;
-        }
-
-        .kros-property-list-container {
-          position: relative;
-          overflow: auto;
-          width: 100%;
-
-          .node-row {
-            width: 100%;
-            flex-direction: row;
-            display: flex;
-            flex: 1;
-            cursor: default;
-          }
-          .node-row > * {
-            line-height: 25px;
-            font-size: 12px;
-          }
-          .mat-tree-node.node-parent {
-            font-weight: bold;
-          }
-          .node-parent.level-0 .node-name {
-            font-weight: bold;
-          }
-          .node-parent {
-            display: flex;
-            margin-right: 7px;
-          }
-          .node-children {
-            display: flex;
-            padding-left: 10px;
-            padding-top: 2px;
-            margin-right: 7px;
-          }
-          .node-button {
-            flex: 0 0 auto;
-            width: 30px;
-            z-index: 2;
-          }
-          .node-name {
-            flex: 2;
-          }
-          .node-value {
-            flex: 3;
-          }
-          @for $index from 0 through 7 {
-            .level-#{$index} {
-              padding-left: #{$index * 10}px;
-            }
-          }
-          .mat-icon-button .mat-icon {
-            font-size: 18px;
-          }
-          .mat-icon-button {
-            line-height: unset;
-            height: auto;
-          }
-          .mat-tree-node {
-            min-height: auto;
-          }
-        }
-      }
-    }
-
-    .model {
-      min-height: 0;
-      flex: 5;
-      cursor: default;
-      padding: 5px;
-    }
-  }
 }

@@ -1,41 +1,32 @@
-@import '~@angular/material/theming';
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+html, body, app-root { height: 100%; }
+
+/*************************************************************************
+ ********************** this is the css that can change scrollbar style ***
+ *************************************************************************
+
+html {
+  --scrollbarBG: #CFD8DC;
+  --thumbBG: #90A4AE;
+}
+
+body::-webkit-scrollbar {
+  width: 11px;
+}
 
 body {
-  font-family: Roboto, Arial, sans-serif;
-  margin: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
 }
 
-* {
-  box-sizing: border-box;
+body::-webkit-scrollbar-track {
+  background: var(--scrollbarBG);
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-
-  .header {
-    flex: 0 0 auto;
-    background: #e0e0e0;
-    color: #303030;
-    overflow: hidden;
-    text-transform: uppercase;
-
-    h4.mat-h4 {
-      margin: 5px 18px;
-      font-weight: 500;
-      font-size: 14px;
-    }
-  }
-
-  .content {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
-  .mat-icon {
-    font-family: 'Material Icons' !important;
-  }
+body::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG) ;
+  border-radius: 6px;
+  border: 3px solid var(--scrollbarBG);
 }
+*/

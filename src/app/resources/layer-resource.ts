@@ -6,7 +6,7 @@ import {IFCObject} from '../classes/ifcObjectEntity';
 import {stringify} from 'querystring';
 import {catchError, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Layer, Layers} from '../layers-selector/layer.service';
+import {Layer, Layers} from '../classes/layer-classes';
 
 @Injectable({
   providedIn: 'root'
