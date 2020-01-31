@@ -15,7 +15,7 @@ export class LayerResource {
   constructor(protected http: HttpClient) {}
 
   public getLayers(): Observable<Layers> {
-    const url = 'http://localhost:3000/layer/';
+    const url = 'http://46.105.124.137:3000/layer/';
     return this.http.get(url).pipe(map((response: Array<Layer>) => {
       const layers = new Layers();
       layers.layers = response;
@@ -24,7 +24,7 @@ export class LayerResource {
   }
 
   public getOidsByLayer(): Observable<Map<string, Array<Number>>> {
-    const url = 'http://localhost:3000/layer/map';
+    const url = 'http://46.105.124.137:3000/layer/map';
     const temp: Observable<Map<string, Array<Number>>> =
       this.http.get(url).pipe(map((response: Array<{calque: string, oids: Array<Number>}>) => {
       const oidsByLayer = new Map<string, Array<Number>>();

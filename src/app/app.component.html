@@ -1,63 +1,10 @@
-<!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    rel="stylesheet">
-<div class="container" fxLayout="column" fxFlexFill>
-    <div class="main-container" fxLayout="column" fxFlexFill>
-        <div fxLayout="row"
-             fxLayoutGap="20px"
-             fxLayoutAlign="<main-axis> <cross-axis>"
-             fxFlexFill
-        >
-            <app-login fxLayout="column"
-                       class="login-container"
-                       fxFlex="0 1 calc(25% - 32px)"
-            ></app-login>
-            <mat-divider [vertical]="true"></mat-divider>
-            <div fxLayout="row"
-                 fxLayoutAlign="<main-axis> <cross-axis>"
-                 fxFlex="0 1 calc(70% - 32px)">
-                <mat-card fxFlexFill>
-                  <mat-card-content fxLayout="row">
-                    <button mat-raised-button *ngFor="let info of projectsInfo" (click)="navigateToProject(info)">
-                      <b>{{info.name}}</b>
-                    </button>
-                  </mat-card-content>
-                </mat-card>
-            </div>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="model-container" fxLayout="row" id="model-container" fxFlexFill>
-            <mat-tab-group fxFlex="0 1 calc(25% - 32px)" fxFlexFill>
-                <mat-tab fxFlex="0 1 calc(50%)" fxFlexFill>
-                    <ng-template mat-tab-label>
-                        <mat-icon class="example-tab-icon">build</mat-icon>
-                        Propriétés et Quantités
-                    </ng-template>
-                    <app-bim-property-list class="top" fxLayout="column" fxFlexFill>
-                        <div></div>
-                    </app-bim-property-list>
-                </mat-tab>
-
-                <mat-tab fxFlex="0 1 calc(50%)" fxFlexFill>
-                  <ng-template mat-tab-label>
-                      <mat-icon class="example-tab-icon">layers</mat-icon>
-                      Calques
-                  </ng-template>
-
-                  <app-layers-selector class="top"></app-layers-selector>
-                </mat-tab>
-            </mat-tab-group>
-            <canvas fxFlex="0 1 calc(70% - 32px)" fxFlexFill
-                    (keypress)="keyPressListener($event)" (click)="inCanvasClick($event)" class="model" id="glcanvas">
-            </canvas>
-        </div>
-    </div>
-</div>-->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 <div class="container">
   <div class="login-line">
+    <img mat-card-image src="../favicon.ico" style="max-width: 90px; max-height: 90px">
     <app-login class="login-component"></app-login>
-    <mat-divider [vertical]="true"></mat-divider>
+    <!--<mat-divider [vertical]="true"></mat-divider>-->
     <mat-card class="projects-component">
       <mat-card-content >
         <button mat-raised-button *ngFor="let info of projectsInfo" (click)="navigateToProject(info)">

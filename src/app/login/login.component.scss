@@ -2,10 +2,16 @@
   display: flex;
   padding: 5px;
   flex-flow: row nowrap;
-  align-items: baseline;
+  align-items: center;
 }
-.formgroup > * {
+/*.formgroup > * {
+  display: flex;
   margin: 5px;
   align-content: flex-start;
   flex-flow: row nowrap;
+}*/
+.credentials-fields {
+  display: flex;
+  margin: 5px;
+  flex-flow: column;
 }

@@ -131,12 +131,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.translations['TOTAL_SURFACE_AREA'] = 'TOTAL_SURFACE_AREA';
 
     this.translations['TOTAL_SHAPE_VOLUME'] = 'TOTAL_SHAPE_VOLUME';
-
-    /* this.bimPropertyListService.propertiesLoaded
-        .pipe(takeUntil(this.unsubscribe))
-        .subscribe((data: BimPropertyModel[]) => {
-            this.setDataSource(data);
-        }); */
   }
 
   inCanvasClick(event) {
@@ -190,7 +184,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   getObjectsStates(address, phase) {
     const params = new HttpParams().set('Phase', phase);
-    return( this.http.get(address + '?Phase=Demo', { responseType: 'text' }) );
+    return( this.http.get(address + '?Phase=PH_000024', { responseType: 'text' }) );
   }
 
   onDirectionChange(event: any) {
@@ -244,7 +238,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
               this.roid = project.lastRevisionId;
               this.loadUnits(model);
-              // this.bimPropertyListService.setModel(model);
               this.bimServerViewer = new BimServerViewer(
                   {
                       triangleThresholdDefaultLayer: totalPrimitives,
@@ -259,7 +252,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
               this.bimServerViewer.setProgressListener((percentage: number) => {
                   this.progress = Math.round(percentage);
                 if (percentage === 100) {
-                  this.getObjectsStates('https://app.flashbim.com/JJPP.php', 'Demo').subscribe(data => {
+                  this.getObjectsStates('https://app.flashbim.com/JJPP.php', 'PH_000024').subscribe(data => {
+                    console.log(data);
                     this.div = document.createElement('div', );
                     this.div.innerHTML = data.trim();
                     const ids = this.setColorsAccordingToDB();
@@ -289,7 +283,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
       } else {
           this.dataSource = undefined;
-          // this.bimPropertyListService.showElementProperties([]);
       }
   }
 
@@ -297,8 +290,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       if (schema === 'ifc4') {
         // return [];
         // return ['IfcSpace', 'IfcOpeningElement', 'IfcOpeningStandardCase'];
-        return ['IfcSpace', 'IfcOpeningElement', 'IfcAnnotation', 'IfcOpeningStandardCase'];
-
+        // return ['IfcSpace', 'IfcOpeningElement', 'IfcAnnotation', 'IfcOpeningStandardCase'];
+        return [/*'IfcSpace',*/ 'IfcOpeningElement', 'IfcOpeningStandardCase'];
       } else {
         // return [];
         // return ['IfcSpace', 'IfcOpeningElement', 'IfcAnnotation'];
@@ -389,11 +382,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   }
 
   public setColorsAccordingToDB() {
-    this.bimServerViewer.viewer.setColor(['660078855'], [0, 100, 200, 100]);
-    this.bimServerViewer.viewer.setColor(['659947783'], [100, 200, 0, 100]);
-    this.bimServerViewer.viewer.setColor(['660013319'], [0, 200, 100, 100]);
-  }
-  /*public setColorsAccordingToDB() {
     const oidToGuid = new Map();
     const guidToOid = new Map();
     const databaseIDsAndState = new Map();
@@ -417,21 +405,31 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       Couler: [0, 100, 200, 100]
     };
 
-    this.bimServerClient.call('LowLevelInterface', 'getDataObjectsByType',
-      {roid: this.bimServerViewer.revisionId, packageName: 'ifc2x3tc1',
-        className: 'IfcBuildingElementProxy', flat: 'false'}, (res) => {
-        console.log('res = ', res);
+     return this.bimServerClient.call(
+      'LowLevelInterface',
+      'getDataObjectsByType',
+      {
+        roid: this.bimServerViewer.revisionId,
+        packageName: 'ifc2x3tc1',
+        className: 'IfcBuildingElementProxy', flat: 'false'
+      },
+      (res) => {
         for (const elem of res) {
-
-          guidToOid.set(elem.values[13].stringValue, elem.oid);
-          oidToGuid.set(elem.oid, elem.values[13].stringValue);
+          console.log(elem);
+          for (const value of elem.values) {
+            if (value.fieldName === 'Tag') {
+              guidToOid.set(value.stringValue, elem.oid);
+              oidToGuid.set(elem.oid, value.stringValue);
+            }
+          }
         }
 
         for (let i = 0; i < node.childNodes[0].childNodes.length; i++) {
           const child = node.childNodes[0].childNodes[i];
-          console.log('child', child);
           if (child['name'] !== '') {
             databaseIDsAndState.set(child['name'], child['value']);
+          } else {
+            console.log('childWithNoName: ', child);
           }
         }
         console.log('databaseIDsAndState = ', databaseIDsAndState);
@@ -441,12 +439,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
           console.log('this.bimServerViewer.viewer.setColor(', numArray, ', ', colors[databaseIDsAndState.get(numero)], ');');
           this.bimServerViewer.viewer.setColor(numArray, colors[databaseIDsAndState.get(numero)]);
         }
+        console.log('result: ', [oidToGuid, guidToOid]);
+        return [oidToGuid, guidToOid];
       },
-      function(res) {
-      });
-    console.log('result: ', [oidToGuid, guidToOid]);
-    return [oidToGuid, guidToOid];
-  }*/
+      error => { console.log(error); return []; }
+    );
+  }
 
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks

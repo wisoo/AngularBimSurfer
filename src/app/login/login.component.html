@@ -20,15 +20,17 @@
 </form>
 -->
 <form [formGroup]="credentials" (ngSubmit)="login()" class="formgroup">
-  <mat-form-field appearance="legacy" matRipple>
-    <input matInput type="email" placeholder="Email address" formControlName="email" autocomplete="on">
-    <mat-error *ngIf="!credentials.controls['email'].valid && credentials.controls['email'].touched">
-      {{ getErrorEmail() }}
-    </mat-error>
-  </mat-form-field>
+  <p class="credentials-fields">
+    <mat-form-field appearance="legacy" matRipple>
+      <input matInput type="email" placeholder="Email address" formControlName="email" autocomplete="on">
+      <mat-error *ngIf="!credentials.controls['email'].valid && credentials.controls['email'].touched">
+        {{ getErrorEmail() }}
+      </mat-error>
+    </mat-form-field>
     <mat-form-field appearance="legacy" mat-ripple>
       <input matInput type="password" placeholder="Password" formControlName="password" autocomplete="on">
     </mat-form-field>
+  </p>
   <button mat-raised-button type="submit">Login</button>
 </form>
 

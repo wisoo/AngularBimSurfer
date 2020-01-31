@@ -13,7 +13,7 @@ export class DataResource {
   constructor(protected http: HttpClient) {}
 
   public getObject(oid): Observable<IFCObject> {
-    const url = 'http://localhost:3000/ifcObject/' + oid.toString();
+    const url = 'http://46.105.124.137:3000/ifcObject/' + oid.toString();
     return this.http.get<IFCObject>(url);
   }
   private handleError(err: HttpErrorResponse) {
